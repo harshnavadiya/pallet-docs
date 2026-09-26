@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Documentation for the Pallet Shopify theme: setup, trade buyers, product fields, the buying desk and order pad, sections, settings, questions and support.">
+<title>Pallet Theme Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #ffffff;
+    --panel: #f5f4f9;
+    --ink: #1b1726;
+    --graphite: #5b566a;
+    --hairline: #e1dfe8;
+    --violet: #473376;
+    --violet-wash: #efebf7;
+    --teal: #008882;
+    --code-bg: #f1eff6;
+    --sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Roboto Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #14111c; --panel: #1c1827; --ink: #ece9f4; --graphite: #a9a3ba; --hairline: #2d283b;
+      --violet: #b9a6ee; --violet-wash: #261f39; --teal: #4fc9c2; --code-bg: #221d31;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #14111c; --panel: #1c1827; --ink: #ece9f4; --graphite: #a9a3ba; --hairline: #2d283b;
+    --violet: #b9a6ee; --violet-wash: #261f39; --teal: #4fc9c2; --code-bg: #221d31;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration-color: var(--violet); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  code { padding: 0.1em 0.35em; border-radius: 4px; background: var(--code-bg); font-family: var(--mono); font-size: 0.84em; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .top { position: sticky; top: 0; z-index: 2; background: var(--ground); border-bottom: 1px solid var(--hairline); }
+  .top__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; max-width: 76rem; margin: 0 auto; padding: 0.85rem clamp(1rem, 3vw, 2.5rem); }
+  .brand { font-weight: 800; font-size: 1.375rem; letter-spacing: -0.01em; text-decoration: none; }
+  .brand small { margin-left: 0.5rem; color: var(--graphite); font-size: 0.8125rem; font-weight: 500; }
+  .top__meta { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--graphite); font-size: 0.8125rem; }
+  .pill { padding: 0.15rem 0.55rem; border-radius: 999px; background: var(--violet-wash); color: var(--violet); font-size: 0.75rem; font-weight: 600; }
+
+  .wrap { display: grid; gap: 2.5rem; max-width: 76rem; margin: 0 auto; padding: 2.5rem clamp(1rem, 3vw, 2.5rem) 6rem; }
+  @media (min-width: 60rem) {
+    .wrap { grid-template-columns: 14.5rem minmax(0, 1fr); gap: 4rem; }
+    .toc { position: sticky; top: 4.75rem; align-self: start; max-height: calc(100vh - 6rem); overflow-y: auto; }
+  }
+  .toc__label { margin: 0 0 0.5rem; color: var(--graphite); font-size: 0.8125rem; font-weight: 600; }
+  .toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--hairline); }
+  .toc a { display: block; padding: 0.3rem 0 0.3rem 0.9rem; margin-left: -1px; border-left: 2px solid transparent; color: var(--graphite); font-size: 0.9rem; text-decoration: none; }
+  .toc a:hover { color: var(--ink); border-left-color: var(--violet); }
+  @media (max-width: 59.99rem) {
+    .toc ol { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; border: 0; }
+    .toc a { padding: 0.2rem 0; border: 0; }
+  }
+
+  main { min-width: 0; }
+  .intro { max-width: 46rem; padding-bottom: 2rem; border-bottom: 2px solid var(--ink); }
+  h1 { margin: 0 0 1rem; font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.25rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; text-wrap: balance; }
+  .lede { margin: 0; color: var(--graphite); font-size: 1.125rem; max-width: 62ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: 0.875rem; color: var(--graphite); }
+  .facts b { color: var(--ink); font-weight: 600; }
+
+  section { padding-top: 3rem; scroll-margin-top: 4.25rem; }
+  h2 { margin: 0 0 1rem; font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
+  h3 { margin: 2rem 0 0.5rem; font-size: 1.0625rem; font-weight: 700; }
+  p, li { max-width: 70ch; }
+  p { margin: 0 0 1rem; }
+  ul, ol.steps { margin: 0 0 1rem; padding-left: 1.25rem; }
+  li + li { margin-top: 0.4rem; }
+  ol.steps { counter-reset: step; list-style: none; padding: 0; }
+  ol.steps > li { position: relative; padding-left: 2.5rem; }
+  ol.steps > li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0.05rem; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--violet); color: #fff; font-size: 0.8125rem; font-weight: 700; }
+  .path { font-weight: 600; }
+
+  .table { overflow-x: auto; margin: 0 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  th, td { padding: 0.6rem 1rem 0.6rem 0; border-bottom: 1px solid var(--hairline); text-align: left; vertical-align: top; }
+  thead th { border-bottom: 2px solid var(--ink); color: var(--graphite); font-size: 0.8125rem; font-weight: 600; }
+  td:first-child { white-space: nowrap; }
+
+  .note { margin: 1.25rem 0; padding: 1rem 1.25rem; border-radius: 8px; background: var(--violet-wash); }
+  .note p:last-child { margin: 0; }
+  dl.faq { margin: 0; }
+  dl.faq dt { margin-top: 1.5rem; font-weight: 700; }
+  dl.faq dd { margin: 0.35rem 0 0; max-width: 70ch; }
+  .contact { display: grid; gap: 1rem; margin: 1rem 0; padding: 1.5rem; border: 2px solid var(--ink); border-radius: 10px; max-width: 42rem; }
+  .contact p { margin: 0; }
+  .muted { color: var(--graphite); }
+  footer.end { max-width: 76rem; margin: 0 auto; padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem; border-top: 1px solid var(--hairline); color: var(--graphite); font-size: 0.8125rem; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top__inner">
+    <a class="brand" href="#top">Pallet <small>theme docs</small></a>
+    <span class="top__meta"><span class="pill">Version <span class="num">1.0.0</span></span></span>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+  <nav class="toc" aria-label="On this page">
+    <p class="toc__label">On this page</p>
+    <ol>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#trade">Trade buyers</a></li>
+      <li><a href="#guests">Retail and guests</a></li>
+      <li><a href="#data">Product data</a></li>
+      <li><a href="#desk">Buying desk and order pad</a></li>
+      <li><a href="#sections">Sections and templates</a></li>
+      <li><a href="#settings">Theme settings</a></li>
+      <li><a href="#shopify">Shopify features</a></li>
+      <li><a href="#faq">Questions</a></li>
+      <li><a href="#code">Editing code</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#releases">Release notes</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="intro">
+      <h1>Set up Pallet</h1>
+      <p class="lede">Pallet is a Shopify theme for stores that sell to trade buyers and the public from one catalog. Signed-in trade buyers see their company, their prices, volume breaks and order rules, and can order by SKU in bulk. Everyone else gets a normal, fast storefront.</p>
+      <ul class="facts">
+        <li><b>Built for</b> wholesale and retail in one store</li>
+        <li><b>Uses</b> Shopify's own B2B: companies, catalogs, quantity rules</li>
+        <li><b>Presets</b> Pallet, Larder, Showroom</li>
+      </ul>
+    </div>
+
+    <section id="start" aria-labelledby="start-h">
+      <h2 id="start-h">Getting started</h2>
+      <ol class="steps">
+        <li><b>Add the theme</b> in <span class="path">Online Store &gt; Themes</span> and pick a preset: <b>Pallet</b> for hardware and site supplies, <b>Larder</b> for food and drink, <b>Showroom</b> for beauty and apparel. Presets only change colors, fonts and the starting home page.</li>
+        <li><b>Turn on new customer accounts</b> in <span class="path">Settings &gt; Customer accounts</span>. Trade buyers sign in through them.</li>
+        <li><b>Set up your trade buyers</b> as companies with catalogs. See <a href="#trade">Trade buyers</a>.</li>
+        <li><b>Create three pages</b> in <span class="path">Online Store &gt; Pages</span> and pick their templates: <b>Buying desk</b> (template <code>page.desk</code>), <b>Apply for a trade account</b> (template <code>page.apply</code>, handle <code>trade-account</code>) and <b>Contact</b> (template <code>page.contact</code>).</li>
+        <li><b>Add them to your menus</b> in <span class="path">Online Store &gt; Navigation</span>. The buying desk usually goes in the main menu, the application page in the footer.</li>
+        <li><b>Review <span class="path">Theme settings &gt; Trade and wholesale</span></b>: what guests see, order minimums and the free-delivery threshold. See <a href="#settings">Theme settings</a>.</li>
+      </ol>
+      <p class="muted">Every trade feature reads Shopify's own data and hides itself when that data isn't there, so the store works as a normal retail store from the first install.</p>
+    </section>
+
+    <section id="trade" aria-labelledby="trade-h">
+      <h2 id="trade-h">Trade buyers</h2>
+      <p>Pallet uses Shopify B2B. You set everything up in the Shopify admin; the theme shows it.</p>
+      <div class="table"><table>
+        <thead><tr><th>Set up in the admin</th><th>What trade buyers see</th></tr></thead>
+        <tbody>
+          <tr><td><span class="path">Customers &gt; Companies</span></td><td>The trade strip above the header: company name, the location they're buying for (with a switcher when they have several), their terms and progress to free delivery.</td></tr>
+          <tr><td>Catalog with a price list</td><td>Their price on every product and in the collection table, with your retail price (the compare-at price) and the saving beside it.</td></tr>
+          <tr><td>Volume pricing</td><td>A price-break ladder on the product page and in the collection table. The tier that applies to the chosen quantity is highlighted, and the add button shows the running total.</td></tr>
+          <tr><td>Quantity rules</td><td>Steppers that start at the minimum and move in the increment, a note under each stepper, and the order pad rounding pasted quantities up to fit.</td></tr>
+          <tr><td>Payment terms</td><td>Checkout shows the terms; the cart notes that they're paying on account. To show terms in the trade strip, fill in the <code>pallet.terms</code> field on the company or location (see <a href="#data">Product data</a>).</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Giving a buyer access</h3>
+      <p>Add the buyer as a contact on the company, with a role at each location they may order for. When they sign in, Shopify asks which location to buy for, and the trade view appears.</p>
+      <h3>Order minimums</h3>
+      <p>Set <b>Order minimum for trade buyers</b> and, if you want, a higher <b>First-order minimum</b> in <span class="path">Theme settings &gt; Trade and wholesale</span>. The cart shows how far short the order is and holds checkout until it's met. Retail shoppers aren't affected.</p>
+      <h3>Trade applications</h3>
+      <p>The <b>Apply for a trade account</b> page uses Shopify's contact form, so applications arrive in your store email. Approve a buyer by creating their company and contact in the admin.</p>
+      <div class="note"><p>Subscriptions and gift cards are for retail checkout only. Shopify's B2B checkout takes one-time purchases, so the subscription picker hides itself for trade buyers.</p></div>
+    </section>
+
+    <section id="guests" aria-labelledby="guests-h">
+      <h2 id="guests-h">Retail and guests</h2>
+      <p>Choose what visitors who aren't signed in see in <span class="path">Theme settings &gt; Trade and wholesale &gt; Prices for visitors who are not signed in</span>:</p>
+      <ul>
+        <li><b>Show retail prices</b>: a normal retail store.</li>
+        <li><b>Show retail prices with a trade sign-in prompt</b>: retail prices, with a link inviting trade buyers to sign in for theirs.</li>
+        <li><b>Hide prices until sign-in</b>: for trade-only stores. Prices, including in search suggestions, show "Sign in to see prices" instead.</li>
+      </ul>
+      <p>Home page sections have a <b>Show to</b> setting (everyone, retail only or trade only), so the home page can speak to both audiences.</p>
+    </section>
+
+    <section id="data" aria-labelledby="data-h">
+      <h2 id="data-h">Product data</h2>
+      <p>These optional fields add detail for trade buyers. Create them in <span class="path">Settings &gt; Custom data</span> with the namespace and key shown, then fill them in on each product. Anything left empty simply doesn't show.</p>
+      <div class="table"><table>
+        <thead><tr><th>Field</th><th>Type</th><th>Where it shows</th></tr></thead>
+        <tbody>
+          <tr><td><code>pallet.pack_label</code></td><td>Single line text</td><td>Beside the price and on the add button, for example "100 pack". Can be set on the product or on a variant; the variant's wins.</td></tr>
+          <tr><td><code>pallet.moq_note</code></td><td>Single line text</td><td>Next to stock, for example "Trade: minimum 5 packs".</td></tr>
+          <tr><td><code>pallet.lead_time</code></td><td>Single line text</td><td>Shown when stock runs out and the item can be backordered, for example "7 days". Product or variant.</td></tr>
+          <tr><td><code>pallet.low_stock_at</code></td><td>Integer</td><td>Stock level at or below which "low stock" shows. Default 10.</td></tr>
+          <tr><td><code>pallet.spec</code></td><td>JSON</td><td>The specification table: a list of <code>{"name": "…", "value": "…"}</code> rows.</td></tr>
+          <tr><td><code>pallet.datasheet</code></td><td>File</td><td>A datasheet download beside the SKU.</td></tr>
+          <tr><td><code>pallet.sample_variant</code></td><td>Variant reference</td><td>An "Add sample" button on the product page.</td></tr>
+          <tr><td><code>pallet.documents</code></td><td>Rich text</td><td>A collapsible block that can show any field in the <code>pallet</code> namespace; set its key in the block.</td></tr>
+          <tr><td><code>pallet.terms</code> (company or location)</td><td>Single line text</td><td>Terms in the trade strip and on the buying desk, for example "Net 30". The location's wins.</td></tr>
+          <tr><td><code>pallet.rep</code> (company or location)</td><td>Single line text</td><td>The buyer's account manager on the buying desk.</td></tr>
+        </tbody>
+      </table></div>
+      <p>SKUs and barcodes come from your variants. Give every variant a unique SKU; the order pad and header search match them exactly.</p>
+    </section>
+
+    <section id="desk" aria-labelledby="desk-h">
+      <h2 id="desk-h">Buying desk and order pad</h2>
+      <p>The buying desk page is a trade buyer's home: the order pad, reorders from past orders, their locations and any downloads you add.</p>
+      <h3>Order pad</h3>
+      <p>Buyers paste lines from a spreadsheet, one SKU and quantity per line, or type them. Each line gets a status:</p>
+      <ul>
+        <li><b>Ready</b>: found, and the quantity fits the rules.</li>
+        <li><b>Rounded</b>: found, and the quantity was raised to the minimum or the next increment.</li>
+        <li><b>Backorder</b>: found, but out of stock; it can still be ordered.</li>
+        <li><b>Not found</b>: no variant has that SKU or barcode.</li>
+      </ul>
+      <p>Change which characters may separate SKU and quantity in <span class="path">Theme settings &gt; Trade and wholesale &gt; Accepted separators</span>.</p>
+      <h3>Variant matrix</h3>
+      <p>Products with exactly two options (for example size and color) get a grid on the product page: one quantity per combination, all added in one click. Turn it off in the product section with <b>Show variant matrix</b>.</p>
+    </section>
+
+    <section id="sections" aria-labelledby="sections-h">
+      <h2 id="sections-h">Sections and templates</h2>
+      <div class="table"><table>
+        <thead><tr><th>Section</th><th>What it's for</th></tr></thead>
+        <tbody>
+          <tr><td>Hero</td><td>Heading, text, buttons and an image, with a color scheme and height.</td></tr>
+          <tr><td>Buying desk band</td><td>A welcome for signed-in trade buyers with links to the order pad and reorders.</td></tr>
+          <tr><td>Featured collection</td><td>A product rail from a collection, or from the buyer's recent orders.</td></tr>
+          <tr><td>Featured product</td><td>One product with its full buy box: trade price, breaks, stock, variants, quantity and add button.</td></tr>
+          <tr><td>Collection list</td><td>Links to your main collections.</td></tr>
+          <tr><td>Multicolumn</td><td>Columns of text with icons, for delivery, returns or account benefits.</td></tr>
+          <tr><td>Trade account application</td><td>The application form with a list of trade benefits.</td></tr>
+          <tr><td>Contact form</td><td>A contact form with phone, email and hours beside it. Signed-in buyers get their details filled in.</td></tr>
+          <tr><td>Announcement bar, header, footer, trade strip</td><td>The site frame. The header has search suggestions and a mega menu; the footer has the country and language selectors.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Product page blocks</h3>
+      <p>The product page is built from blocks you can reorder or remove: title, vendor, SKU, price, price breaks, inventory status, variant picker (buttons or dropdown), buy buttons, pickup availability, sample button, description, delivery note, specification table, collapsible, text, custom Liquid and app blocks.</p>
+      <h3>Collection views</h3>
+      <p>Collections can show as a grid of cards or a dense table for trade buyers. Buyers switch with the Grid and Table buttons; set the default in the collection section.</p>
+    </section>
+
+    <section id="settings" aria-labelledby="settings-h">
+      <h2 id="settings-h">Theme settings</h2>
+      <h3>Trade and wholesale</h3>
+      <div class="table"><table>
+        <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>Prices for visitors who are not signed in</td><td>Retail prices, retail prices with a trade sign-in prompt, or hidden until sign-in.</td></tr>
+          <tr><td>Show RRP beside trade price</td><td>Shows your retail (compare-at) price and the trade saving.</td></tr>
+          <tr><td>Show per-unit price</td><td>Shows Shopify's unit price, for example per liter or per kilogram.</td></tr>
+          <tr><td>Show stock counts</td><td>Shows "240 in stock" instead of just "in stock".</td></tr>
+          <tr><td>Cap stock counts at</td><td>Shows larger counts as the cap with a plus sign. 0 shows exact counts.</td></tr>
+          <tr><td>Order minimum for trade buyers</td><td>Cart total a trade order must reach before checkout.</td></tr>
+          <tr><td>First-order minimum</td><td>A different minimum for a trade buyer's first order.</td></tr>
+          <tr><td>Free delivery threshold</td><td>Shows progress to free delivery in the trade strip and cart. Set the actual free shipping rate in <span class="path">Settings &gt; Shipping and delivery</span>.</td></tr>
+          <tr><td>Accepted separators</td><td>Characters that can sit between SKU and quantity on the order pad.</td></tr>
+          <tr><td>Trade account application page</td><td>Where "Apply for a trade account" links go. Empty uses the page with handle <code>trade-account</code>.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Everything else</h3>
+      <ul>
+        <li><b>Colors</b>: color schemes for every section, plus the success, warning and error colors used by stock and order messages.</li>
+        <li><b>Typography</b>: body, heading and SKU fonts, base size and heading scale.</li>
+        <li><b>Layout</b>: page width and margin, corner radius, table density, animations and right-to-left layout.</li>
+        <li><b>Cart</b>: drawer or page, and whether to ask for a PO number and a delivery note.</li>
+        <li><b>Product cards</b>: image ratio, SKU, vendor and quick add.</li>
+      </ul>
+    </section>
+
+    <section id="shopify" aria-labelledby="shopify-h">
+      <h2 id="shopify-h">Shopify features</h2>
+      <ul>
+        <li><b>Search suggestions</b> in the header and the phone menu: products, collections, pages and popular searches, plus an exact match when a buyer types a SKU or barcode. Turn off in the header section.</li>
+        <li><b>Filters</b> on collection and search pages, from the Shopify Search &amp; Discovery app.</li>
+        <li><b>Pickup availability</b> on product pages, when you offer local pickup in <span class="path">Settings &gt; Shipping and delivery</span>.</li>
+        <li><b>Subscriptions</b>: a purchase options picker appears on products with selling plans from a subscription app. Retail only.</li>
+        <li><b>Gift cards</b>, with a form to send the card to someone else on a date you choose.</li>
+        <li><b>Markets and languages</b>: country and language selectors in the footer. The theme ships in English, French, German, Spanish and Italian.</li>
+        <li><b>Dynamic checkout buttons</b> for retail shoppers (never shown to trade buyers), <b>product recommendations</b>, <b>3D models and video</b> in the product gallery and <b>app blocks</b> in the product and featured product sections.</li>
+      </ul>
+    </section>
+
+    <section id="faq" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions</h2>
+      <dl class="faq">
+        <dt>Does Pallet need an app?</dt>
+        <dd>No. Everything on this page uses Shopify's own features. An optional companion app will add quotes, saved buying lists and credit balances; the theme already has a place for it on the buying desk.</dd>
+        <dt>A trade buyer signed in but sees retail prices.</dt>
+        <dd>Their customer record isn't a contact on a company yet, or their location has no catalog. Check <span class="path">Customers &gt; Companies</span>.</dd>
+        <dt>Products show as sold out for some buyers.</dt>
+        <dd>Shopify marks items unavailable when the buyer's market or delivery address has no shipping rate. Check <span class="path">Settings &gt; Shipping and delivery</span> for the buyer's country.</dd>
+        <dt>The order pad says "Not found" for a SKU I know exists.</dt>
+        <dd>The SKU must match exactly and the product must be published to the Online Store and in the buyer's catalog. Barcodes work too.</dd>
+        <dt>Can I sell only to trade buyers?</dt>
+        <dd>Yes. Set prices for guests to <b>Hide prices until sign-in</b> and, if you like, keep the storefront password on until launch.</dd>
+      </dl>
+    </section>
+
+    <section id="code" aria-labelledby="code-h">
+      <h2 id="code-h">Editing code</h2>
+      <p>Before changing the theme's code, <b>duplicate the theme first</b> (<span class="path">Online Store &gt; Themes &gt; ⋯ &gt; Duplicate</span>) so you can go back. Styles live in <code>assets/base.css</code> and <code>assets/critical.css</code>, scripts in <code>assets/pallet.js</code>. Code changes aren't covered by theme support; for custom work, we suggest hiring a Shopify Partner.</p>
+    </section>
+
+    <section id="support" aria-labelledby="support-h">
+      <h2 id="support-h">Support</h2>
+      <div class="contact">
+        <p>Questions, or something not working as described? Contact us through the support form. Include your store address (for example <code>storename.myshopify.com</code>), what you expected to happen, and a screenshot if you can.</p>
+        <p><b>Support form:</b> <a href="https://tally.so/r/aQVgby">tally.so/r/aQVgby</a></p>
+        <p class="muted">We reply within two business days, and we fix theme bugs in the next update. Support covers setup questions and bugs in the theme; it doesn't include customization.</p>
+      </div>
+    </section>
+
+    <section id="releases" aria-labelledby="releases-h">
+      <h2 id="releases-h">Release notes</h2>
+      <h3><span class="num">1.0.0</span></h3>
+      <ul>
+        <li>First release: the trade strip and location switcher, trade prices with RRP, volume price breaks, rule-aware quantities, order minimums, the collection table with batch add, the variant matrix, the buying desk with order pad and reorders, SKU and barcode search, three presets and the full set of Shopify features above.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<footer class="end">Pallet theme by Harsh Navadiya · Documentation for version <span class="num">1.0.0</span></footer>
+</body>
+</html>

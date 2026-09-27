@@ -158,8 +158,8 @@
       <div class="table"><table>
         <thead><tr><th>Set up in the admin</th><th>What trade buyers see</th></tr></thead>
         <tbody>
-          <tr><td><span class="path">Customers &gt; Companies</span></td><td>The trade strip above the header: company name, the location they're buying for (with a switcher when they have several), their terms and progress to free delivery.</td></tr>
-          <tr><td>Catalog with a price list</td><td>Their price on every product and in the collection table, with your retail price (the compare-at price) and the saving beside it.</td></tr>
+          <tr><td><span class="path">Customers &gt; Companies</span></td><td>The trade strip above the header: company name, the location they're buying for (with a switcher when they have several), their terms and how much more they need for free delivery.</td></tr>
+          <tr><td>Catalog with a price list</td><td>Their price on every product and in the collection table, with your retail price (the compare-at price) beside it, labeled RRP. The product page also shows the trade saving.</td></tr>
           <tr><td>Volume pricing</td><td>A price-break ladder on the product page and in the collection table. The tier that applies to the chosen quantity is highlighted, and the add button shows the running total.</td></tr>
           <tr><td>Quantity rules</td><td>Steppers that start at the minimum and move in the increment, a note under each stepper, and the order pad rounding pasted quantities up to fit.</td></tr>
           <tr><td>Payment terms</td><td>Checkout shows the terms; the cart notes that they're paying on account. To show terms in the trade strip, fill in the <code>pallet.terms</code> field on the company or location (see <a href="#data">Product data</a>).</td></tr>
@@ -182,7 +182,7 @@
         <li><b>Show retail prices with a trade sign-in prompt</b>: retail prices, with a link inviting trade buyers to sign in for theirs.</li>
         <li><b>Hide prices until sign-in</b>: for trade-only stores. Prices, including in search suggestions, show "Sign in to see prices" instead.</li>
       </ul>
-      <p>Home page sections have a <b>Show to</b> setting (everyone, retail only or trade only), so the home page can speak to both audiences.</p>
+      <p>Every section has a <b>Show to</b> setting (everyone, retail only or trade only), and so do the messages in the announcement bar and the columns in Multicolumn, so one home page can speak to both audiences. The Pallet preset's hero, for example, shows to retail only; trade buyers see the buying desk band in its place.</p>
     </section>
 
     <section id="data" aria-labelledby="data-h">
@@ -194,11 +194,11 @@
           <tr><td><code>pallet.pack_label</code></td><td>Single line text</td><td>Beside the price and on the add button, for example "100 pack". Can be set on the product or on a variant; the variant's wins.</td></tr>
           <tr><td><code>pallet.moq_note</code></td><td>Single line text</td><td>Next to stock, for example "Trade: minimum 5 packs".</td></tr>
           <tr><td><code>pallet.lead_time</code></td><td>Single line text</td><td>Shown when stock runs out and the item can be backordered, for example "7 days". Product or variant.</td></tr>
-          <tr><td><code>pallet.low_stock_at</code></td><td>Integer</td><td>Stock level at or below which "low stock" shows. Default 10.</td></tr>
+          <tr><td><code>pallet.low_stock_at</code></td><td>Integer</td><td>Stock level at or below which the count shows with an amber marker. Default 10.</td></tr>
           <tr><td><code>pallet.spec</code></td><td>JSON</td><td>The specification table: a list of <code>{"name": "…", "value": "…"}</code> rows.</td></tr>
           <tr><td><code>pallet.datasheet</code></td><td>File</td><td>A datasheet download beside the SKU.</td></tr>
           <tr><td><code>pallet.sample_variant</code></td><td>Variant reference</td><td>An "Add sample" button on the product page.</td></tr>
-          <tr><td><code>pallet.documents</code></td><td>Rich text</td><td>A collapsible block that can show any field in the <code>pallet</code> namespace; set its key in the block.</td></tr>
+          <tr><td><code>pallet.documents</code></td><td>Rich text</td><td>A collapsible block that can show any field in the <code>pallet</code> namespace; set its key in the block. Products without it don't show the block.</td></tr>
           <tr><td><code>pallet.terms</code> (company or location)</td><td>Single line text</td><td>Terms in the trade strip and on the buying desk, for example "Net 30". The location's wins.</td></tr>
           <tr><td><code>pallet.rep</code> (company or location)</td><td>Single line text</td><td>The buyer's account manager on the buying desk.</td></tr>
         </tbody>
@@ -215,11 +215,15 @@
         <li><b>Ready</b>: found, and the quantity fits the rules.</li>
         <li><b>Rounded</b>: found, and the quantity was raised to the minimum or the next increment.</li>
         <li><b>Backorder</b>: found, but out of stock; it can still be ordered.</li>
-        <li><b>Not found</b>: no variant has that SKU or barcode.</li>
+        <li><b>Combined</b>: the SKU was already on the list, so the quantities were added together.</li>
+        <li><b>Sold out</b> or <b>Discontinued</b>: found, but it can't be ordered now, so it isn't added.</li>
+        <li><b>Not found</b>: no variant has that SKU or barcode. The buyer can correct the SKU in the line and check it again.</li>
+        <li><b>Not added</b>: the cart refused the line (for example, not enough stock); the reason shows beside it.</li>
       </ul>
+      <p>After each check, a summary counts the lines that are ready and those to review, with <b>Show only these</b> to list just the ones that need attention. The pasted lines move into the list, so the box is empty for the next paste.</p>
       <p>Change which characters may separate SKU and quantity in <span class="path">Theme settings &gt; Trade and wholesale &gt; Accepted separators</span>.</p>
       <h3>Variant matrix</h3>
-      <p>Products with exactly two options (for example size and color) get a grid on the product page: one quantity per combination, all added in one click. Turn it off in the product section with <b>Show variant matrix</b>.</p>
+      <p>Products with exactly two options (for example size and color) get a grid: one quantity per combination, each with its price and stock, all added in one click. For trade buyers the grid is the buy box, with <b>Order a single variant</b> folded beneath it. In the product section, <b>Show variant matrix</b> turns it off and <b>Show matrix to</b> chooses trade buyers only (the default) or everyone; for retail shoppers it sits below the product details.</p>
     </section>
 
     <section id="sections" aria-labelledby="sections-h">
@@ -228,20 +232,20 @@
         <thead><tr><th>Section</th><th>What it's for</th></tr></thead>
         <tbody>
           <tr><td>Hero</td><td>Heading, text, buttons and an image, with a color scheme and height.</td></tr>
-          <tr><td>Buying desk band</td><td>A welcome for signed-in trade buyers with links to the order pad and reorders.</td></tr>
+          <tr><td>Buying desk band</td><td>One row for signed-in trade buyers: their last order with a reorder link, the order pad, and how far they are from the order minimum or free delivery.</td></tr>
           <tr><td>Featured collection</td><td>A product rail from a collection, or from the buyer's recent orders.</td></tr>
           <tr><td>Featured product</td><td>One product with its full buy box: trade price, breaks, stock, variants, quantity and add button.</td></tr>
           <tr><td>Collection list</td><td>Links to your main collections.</td></tr>
           <tr><td>Multicolumn</td><td>Columns of text with icons, for delivery, returns or account benefits.</td></tr>
           <tr><td>Trade account application</td><td>The application form with a list of trade benefits.</td></tr>
-          <tr><td>Contact form</td><td>A contact form with phone, email and hours beside it. Signed-in buyers get their details filled in.</td></tr>
+          <tr><td>Contact form</td><td>A contact form with phone, email and hours beside it. Signed-in buyers get their details filled in. On the contact template its heading is the page title.</td></tr>
           <tr><td>Announcement bar, header, footer, trade strip</td><td>The site frame. The header has search suggestions and a mega menu; the footer has the country and language selectors.</td></tr>
         </tbody>
       </table></div>
       <h3>Product page blocks</h3>
       <p>The product page is built from blocks you can reorder or remove: title, vendor, SKU, price, price breaks, inventory status, variant picker (buttons or dropdown), buy buttons, pickup availability, sample button, description, delivery note, specification table, collapsible, text, custom Liquid and app blocks.</p>
       <h3>Collection views</h3>
-      <p>Collections can show as a grid of cards or a dense table for trade buyers. Buyers switch with the Grid and Table buttons; set the default in the collection section.</p>
+      <p>Collections can show as a grid of cards or a dense table. Buyers switch with the Grid and Table buttons; in the collection section, set the default view and whether the switch shows to trade buyers only or everyone. In the table, products with options open into one row per variant, and <b>Show all options</b> opens them all. Quantities a buyer enters are kept while they move between pages, until they add them to the cart.</p>
     </section>
 
     <section id="settings" aria-labelledby="settings-h">
@@ -251,13 +255,15 @@
         <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
         <tbody>
           <tr><td>Prices for visitors who are not signed in</td><td>Retail prices, retail prices with a trade sign-in prompt, or hidden until sign-in.</td></tr>
-          <tr><td>Show RRP beside trade price</td><td>Shows your retail (compare-at) price and the trade saving.</td></tr>
+          <tr><td>Show RRP beside trade price</td><td>Shows your retail (compare-at) price, labeled RRP, and the trade saving on the product page.</td></tr>
           <tr><td>Show per-unit price</td><td>Shows Shopify's unit price, for example per liter or per kilogram.</td></tr>
           <tr><td>Show stock counts</td><td>Shows "240 in stock" instead of just "in stock".</td></tr>
           <tr><td>Cap stock counts at</td><td>Shows larger counts as the cap with a plus sign. 0 shows exact counts.</td></tr>
           <tr><td>Order minimum for trade buyers</td><td>Cart total a trade order must reach before checkout.</td></tr>
           <tr><td>First-order minimum</td><td>A different minimum for a trade buyer's first order.</td></tr>
-          <tr><td>Free delivery threshold</td><td>Shows progress to free delivery in the trade strip and cart. Set the actual free shipping rate in <span class="path">Settings &gt; Shipping and delivery</span>.</td></tr>
+          <tr><td>Free delivery threshold</td><td>Shows trade buyers how much more they need for free delivery, in the trade strip, the buying desk band and the cart. Set the actual free shipping rate in <span class="path">Settings &gt; Shipping and delivery</span>.</td></tr>
+          <tr><td>Same-day dispatch cutoff</td><td>The hour, in your store's time zone, before which in-stock orders ship the same day. Stock lines and the cart say "ships today", "ships tomorrow" or the next dispatch day, and update in the browser as the cutoff passes.</td></tr>
+          <tr><td>Dispatch days</td><td>Monday to Friday, Monday to Saturday or every day.</td></tr>
           <tr><td>Accepted separators</td><td>Characters that can sit between SKU and quantity on the order pad.</td></tr>
           <tr><td>Trade account application page</td><td>Where "Apply for a trade account" links go. Empty uses the page with handle <code>trade-account</code>.</td></tr>
         </tbody>
@@ -319,7 +325,7 @@
       <h2 id="releases-h">Release notes</h2>
       <h3><span class="num">1.0.0</span></h3>
       <ul>
-        <li>First release: the trade strip and location switcher, trade prices with RRP, volume price breaks, rule-aware quantities, order minimums, the collection table with batch add, the variant matrix, the buying desk with order pad and reorders, SKU and barcode search, three presets and the full set of Shopify features above.</li>
+        <li>First release: the trade strip and location switcher, trade prices with RRP, volume price breaks, rule-aware quantities, order minimums, the collection table with batch add, the variant matrix as the trade buy box, the buying desk with order pad and reorders, same-day dispatch times, audience settings on every section, SKU and barcode search, three presets and the full set of Shopify features above.</li>
       </ul>
     </section>
   </main>

@@ -161,7 +161,7 @@
           <tr><td><span class="path">Customers &gt; Companies</span></td><td>The trade strip above the header: company name, the location they're buying for (with a switcher when they have several), their terms and how much more they need for free delivery.</td></tr>
           <tr><td>Catalog with a price list</td><td>Their price on every product and in the collection table, with your retail price (the compare-at price) beside it, labeled RRP. The product page also shows the trade saving.</td></tr>
           <tr><td>Volume pricing</td><td>A price-break ladder on the product page and in the collection table. The tier that applies to the chosen quantity is highlighted, and the add button shows the running total.</td></tr>
-          <tr><td>Quantity rules</td><td>Steppers that start at the minimum and move in the increment, a note under each stepper, and the order pad rounding pasted quantities up to fit.</td></tr>
+          <tr><td>Quantity rules</td><td>Steppers that start at the minimum and move in the increment, a note under each stepper, and the order pad rounding pasted quantities up to fit. Where you don't sell past zero stock, steppers stop at what's left, and a product with fewer left than the minimum says "Not enough stock" on cards and in the collection table instead of offering a quantity the cart would refuse.</td></tr>
           <tr><td>Payment terms</td><td>Checkout shows the terms; the cart notes that they're paying on account. To show terms in the trade strip, fill in the <code>pallet.terms</code> field on the company or location (see <a href="#data">Product data</a>).</td></tr>
         </tbody>
       </table></div>
@@ -210,12 +210,14 @@
       <h2 id="desk-h">Buying desk and order pad</h2>
       <p>The buying desk page is a trade buyer's home: the order pad, reorders from past orders, their locations and any downloads you add.</p>
       <h3>Order pad</h3>
-      <p>Buyers paste lines from a spreadsheet, one SKU and quantity per line, or type them. Each line gets a status:</p>
+      <p>Buyers paste lines from a spreadsheet, one SKU and quantity per line, or type them. <b>Reorder</b> on a past order loads its lines the same way, at the quantities ordered, checked against today's stock. Each line gets a status:</p>
       <ul>
         <li><b>Ready</b>: found, and the quantity fits the rules.</li>
         <li><b>Rounded</b>: found, and the quantity was raised to the minimum or the next increment.</li>
         <li><b>Backorder</b>: found, but out of stock; it can still be ordered.</li>
         <li><b>Combined</b>: the SKU was already on the list, so the quantities were added together.</li>
+        <li><b>Lowered</b>: found, but fewer are in stock than asked for, so the quantity was lowered to the most the rules allow (for example, "Only 23 in stock, so 500 became 23").</li>
+        <li><b>Not enough stock</b>: found, but fewer are left than the minimum order, so it isn't added. The line says how many are left.</li>
         <li><b>Sold out</b> or <b>Discontinued</b>: found, but it can't be ordered now, so it isn't added.</li>
         <li><b>Not found</b>: no variant has that SKU or barcode. The buyer can correct the SKU in the line and check it again.</li>
         <li><b>Not added</b>: the cart refused the line (for example, not enough stock); the reason shows beside it.</li>
